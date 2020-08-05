@@ -1,39 +1,59 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-class App extends React.Component {
-
-componentDidMount(){
+  import PlacesAutocomplete, {
+    geocodeByAddress,
+    getLatLng
+  } from "react-places-autocomplete";
+  
   let apiKey = process.env.REACT_APP_API_KEY
 
-  fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=Amoeba&types=establishment&location=37.76999,-122.44696&radius=500&key=${apiKey}`)
-  .then(res => res.json())
-  .then(json => console.log(json))
-
-}
-render(){
-  console.log(process.env.REACT_APP_API_KEY)
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+  
+  export default function App() {
+    const [address, setAddress] = React.useState("");
+    const [coordinates, setCoordinates] = React.useState({
+      lat: null,
+      lng: null
+    });
+  
+    const handleSelect = async value => {
+      const results = await geocodeByAddress(value);
+      const latLng = await getLatLng(results[0]);
+      setAddress(value);
+      setCoordinates(latLng);
+    };
+  
+    return (
+      <div>
+        <PlacesAutocomplete
+          value={address}
+          onChange={setAddress}
+          onSelect={handleSelect}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+            <div>
+              <p>Latitude: {coordinates.lat}</p>
+              <p>Longitude: {coordinates.lng}</p>
+  
+              <input {...getInputProps({ placeholder: "Type address" })} />
+  
+              <div>
+                {loading ? <div>...loading</div> : null}
+  
+                {suggestions.map(suggestion => {
+                  const style = {
+                    backgroundColor: suggestion.active ? "#41b6e6" : "#fff"
+                  };
+  
+                  return (
+                    <div {...getSuggestionItemProps(suggestion, { style })}>
+                      {suggestion.description}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </PlacesAutocomplete>
+      </div>
+    );
   }
-}
-
-export default App;
