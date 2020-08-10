@@ -1,19 +1,19 @@
 import React from 'react';
 
-import PlacesAutocomplete, {
-  geocodeByAddress,
-   getLatLng
-} from "react-places-autocomplete";
+import PlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
 let apiKey = process.env.REACT_APP_API_KEY
 
-  
 export default function App() {
   const [address, setAddress] = React.useState("");
   const [coordinates, setCoordinates] = React.useState({
     lat: null,
     lng: null
   });
+
+  const handleChange = value => {
+    setAddress(value)
+  }
   
   const handleSelect = value => {
     geocodeByAddress(value)
@@ -24,17 +24,17 @@ export default function App() {
       setCoordinates(latLng)
     })
     .catch(error => console.log('error', error))
-    }
+  }
   
   return (
     <div>
       <PlacesAutocomplete
         value={address}
-        onChange={setAddress}
-        onSelect={handleSelect}
-      >
+        onChange={handleChange}
+        onSelect={handleSelect} >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
+            <p>Address: {address} </p>
             <p>Latitude: {coordinates.lat}</p>
             <p>Longitude: {coordinates.lng}</p>
   
@@ -49,7 +49,7 @@ export default function App() {
                 };
   
                 return (
-                  <div {...getSuggestionItemProps(suggestion, { style })}>
+                  <div key={`suggestion-${suggestion.id}`} {...getSuggestionItemProps(suggestion, { style })}>
                     {suggestion.description}
                   </div>
                 );
