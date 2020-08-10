@@ -1,59 +1,63 @@
 import React from 'react';
 
-  import PlacesAutocomplete, {
-    geocodeByAddress,
-    getLatLng
-  } from "react-places-autocomplete";
-  
-  let apiKey = process.env.REACT_APP_API_KEY
+import PlacesAutocomplete, {
+  geocodeByAddress,
+   getLatLng
+} from "react-places-autocomplete";
+
+let apiKey = process.env.REACT_APP_API_KEY
 
   
-  export default function App() {
-    const [address, setAddress] = React.useState("");
-    const [coordinates, setCoordinates] = React.useState({
-      lat: null,
-      lng: null
-    });
+export default function App() {
+  const [address, setAddress] = React.useState("");
+  const [coordinates, setCoordinates] = React.useState({
+    lat: null,
+    lng: null
+  });
   
-    const handleSelect = async value => {
-      const results = await geocodeByAddress(value);
-      const latLng = await getLatLng(results[0]);
-      setAddress(value);
-      setCoordinates(latLng);
-    };
+  const handleSelect = value => {
+    geocodeByAddress(value)
+    .then(res => getLatLng(res[0]))
+    .then(latLng => {
+      console.log(latLng, value)
+      setAddress(value)
+      setCoordinates(latLng)
+    })
+    .catch(error => console.log('error', error))
+    }
   
-    return (
-      <div>
-        <PlacesAutocomplete
-          value={address}
-          onChange={setAddress}
-          onSelect={handleSelect}
-        >
-          {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+  return (
+    <div>
+      <PlacesAutocomplete
+        value={address}
+        onChange={setAddress}
+        onSelect={handleSelect}
+      >
+        {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
+          <div>
+            <p>Latitude: {coordinates.lat}</p>
+            <p>Longitude: {coordinates.lng}</p>
+  
+            <input {...getInputProps({ placeholder: "Type address" })} />
+  
             <div>
-              <p>Latitude: {coordinates.lat}</p>
-              <p>Longitude: {coordinates.lng}</p>
+              {loading ? <div>...loading</div> : null}
   
-              <input {...getInputProps({ placeholder: "Type address" })} />
+              {suggestions.map(suggestion => {
+                const style = {
+                  backgroundColor: suggestion.active ? "#41b6e6" : "#fff"
+                };
   
-              <div>
-                {loading ? <div>...loading</div> : null}
-  
-                {suggestions.map(suggestion => {
-                  const style = {
-                    backgroundColor: suggestion.active ? "#41b6e6" : "#fff"
-                  };
-  
-                  return (
-                    <div {...getSuggestionItemProps(suggestion, { style })}>
-                      {suggestion.description}
-                    </div>
-                  );
-                })}
-              </div>
+                return (
+                  <div {...getSuggestionItemProps(suggestion, { style })}>
+                    {suggestion.description}
+                  </div>
+                );
+              })}
             </div>
-          )}
-        </PlacesAutocomplete>
-      </div>
-    );
-  }
+          </div>
+        )}
+      </PlacesAutocomplete>
+    </div>
+  );
+}
