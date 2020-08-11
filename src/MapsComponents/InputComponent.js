@@ -3,15 +3,9 @@ import PlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-places-au
 
 let apiKey = process.env.REACT_APP_API_KEY
 
-export default function InputComponent() {
-  const [address, setAddress] = React.useState("");
-  const [coordinates, setCoordinates] = React.useState({
-    lat: null,
-    lng: null
-  });
-
+export default function InputComponent(props) {
   const handleChange = value => {
-    setAddress(value)
+    props.setLocation({address: value})
   }
   
   const handleSelect = value => {
@@ -19,8 +13,11 @@ export default function InputComponent() {
     .then(res => getLatLng(res[0]))
     .then(latLng => {
       console.log(latLng, value)
-      setAddress(value)
-      setCoordinates(latLng)
+      props.setLocation({
+          address: value,
+          lat: latLng.lat,
+          lng: latLng.lng
+        })
     })
     .catch(error => console.log('error', error))
   }
@@ -28,14 +25,14 @@ export default function InputComponent() {
   return (
     <div>
       <PlacesAutocomplete
-        value={address}
+        value={props.location.address}
         onChange={handleChange}
         onSelect={handleSelect} >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
-            <p>Address: {address} </p>
-            <p>Latitude: {coordinates.lat}</p>
-            <p>Longitude: {coordinates.lng}</p>
+            <p>Address: {props.location.address} </p>
+            <p>Latitude: {props.location.lat}</p>
+            <p>Longitude: {props.location.lng}</p>
   
             <input {...getInputProps({ placeholder: "Type address" })} />
   
@@ -44,7 +41,7 @@ export default function InputComponent() {
   
               {suggestions.map(suggestion => {
                 const style = {
-                  backgroundColor: suggestion.active ? "#41b6e6" : "#fff"
+                  backgroundColor: suggestion.active ? "yellow" : "white"
                 };
   
                 return (
