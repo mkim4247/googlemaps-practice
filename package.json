@@ -8,8 +8,10 @@
     "@testing-library/user-event": "^7.1.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-google-maps": "^9.4.5",
     "react-places-autocomplete": "^7.3.0",
-    "react-scripts": "3.4.1"
+    "react-scripts": "^3.4.2",
+    "recompose": "^0.30.0"
   },
   "scripts": {
     "start": "react-scripts start",

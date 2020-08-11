@@ -1,5 +1,7 @@
 import React from 'react';
-import InputComponent from './MapsComponents/InputComponent'
+import PickupContainer from './MapsComponents/PickupContainer';
+import DropoffContainer from './MapsComponents/DropoffContainer';
+import MapContainer from './MapsComponents/MapContainer';
 
 export default function App() {
   const [pickup, setPickup] = React.useState({
@@ -16,8 +18,9 @@ export default function App() {
 
   return(
     <div>
-      <InputComponent location={pickup} setLocation={setPickup}/>
-      <InputComponent location={dropoff} setLocation={setDropoff}/>
+      <PickupContainer location={pickup} setLocation={setPickup}/>
+      <DropoffContainer location={dropoff} setLocation={setDropoff}/>
+      <MapContainer places={[pickup, dropoff]}/>
     </div>
   )  
 }
