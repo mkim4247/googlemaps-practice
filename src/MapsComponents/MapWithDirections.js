@@ -1,32 +1,20 @@
 import React from 'react';
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker,
-} from 'react-google-maps';
+import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps';
 import MapDirectionsRenderer from './MapDirectionsRenderer';
 
-
-let apiKey = process.env.REACT_APP_API_KEY
-
+const apiKey = process.env.REACT_APP_API_KEY
 
 const Map = withScriptjs(
-  withGoogleMap(props => (
+  withGoogleMap( props => (
     <GoogleMap
       defaultCenter={props.defaultCenter}
-      defaultZoom={props.defaultZoom}
-    >
-      {props.places.map((marker, index) => {
-        const position = {lat: marker.lat, lng: marker.lng};
-        return <Marker key={index} position={position}/>;
-      })}
+      defaultZoom={props.defaultZoom} >
       <MapDirectionsRenderer places={props.places} travelMode={window.google.maps.TravelMode.DRIVING} />
     </GoogleMap>
   ))
 );
 
-const AppMap = props => {
+const MapWithDirections = props => {
   const {places} = props;
 
   const {
@@ -54,4 +42,4 @@ const AppMap = props => {
   );
 };
 
-export default AppMap;
+export default MapWithDirections;
