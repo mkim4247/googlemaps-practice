@@ -21,20 +21,20 @@ const App = () => {
     lng: null
   })
 
-    if(navigator && navigator.geolocation){
-      navigator.geolocation.getCurrentPosition((pos) => {
-        const coords = pos.coords;
-        console.log(pos)
-        setUserCoord({
-          lat: coords.latitude,
-          lng: coords.longitude
-        });
-      })
-    }
+  // if(navigator && navigator.geolocation){
+  //   navigator.geolocation.getCurrentPosition((pos) => {
+  //     const coords = pos.coords;
+  //     console.log(pos)
+  //     setUserCoord({
+  //       lat: coords.latitude,
+  //       lng: coords.longitude
+  //     });
+  //   })
+  // }
 
-    
+    console.log('ref')
 
-  
+
   return(
     <div>
       <Switch>
