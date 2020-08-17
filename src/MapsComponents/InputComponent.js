@@ -1,55 +1,53 @@
 import React from 'react';
 import PlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-places-autocomplete";
 
-let apiKey = process.env.REACT_APP_API_KEY
-
-export default function InputComponent(props) {
+const InputComponent = props => {
   const handleChange = value => {
     props.setLocation({ 
         address: value 
-    })
-  }
+    });
+  };
   
   const handleSelect = value => {
     geocodeByAddress(value)
-    .then( res => getLatLng(res[0]))
-    .then( latLng => {
+    .then(res => getLatLng(res[0]))
+    .then(latLng => {
       console.log(latLng, value)
       props.setLocation({
           address: value,
           lat: latLng.lat,
           lng: latLng.lng
-        })
+        });
     })
     .catch(error => console.log('error', error))
-  }
+  };
   
   return (
     <div>
       <PlacesAutocomplete
-        value={ props.location.address } 
-        onChange={ handleChange }
-        onSelect={ handleSelect } >
+        value={props.location.address}
+        onChange={handleChange}
+        onSelect={handleSelect}>
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
-            <p>Address: { props.location.address } </p>
-            <p>Latitude: { props.location.lat } </p>
-            <p>Longitude: { props.location.lng } </p>
+            <p> Address: {props.location.address} </p>
+            <p> Latitude: {props.location.lat} </p>
+            <p> Longitude: {props.location.lng} </p>
   
-            <input { ...getInputProps({ placeholder: "Type address" })} />
+            <input { ...getInputProps({ placeholder: "Type address" })}/>
   
             <div>
-              { loading ? <div> ...loading </div> : null }
+              {loading ? <div> ...loading </div> : null}
   
-              { suggestions.map( suggestion => {
+              {suggestions.map( suggestion => {
                 const style = {
                   backgroundColor: suggestion.active ? "yellow" : "white"
                 };
   
                 return (
-                  <div key={ `${suggestion.placeId}` } { ...getSuggestionItemProps( suggestion, { style }) }>
-                    { suggestion.description }
-                  </div>
+                    <div key={`${suggestion.placeId}`} {...getSuggestionItemProps(suggestion, {style})}>
+                        {suggestion.description}
+                    </div>
                 );
               })}
             </div>
@@ -59,3 +57,5 @@ export default function InputComponent(props) {
     </div>
   );
 }
+
+export default InputComponent

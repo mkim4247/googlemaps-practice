@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker,
-  DirectionsRenderer
-} from 'react-google-maps';
+import { DirectionsRenderer } from 'react-google-maps';
 
 export default function MapDirectionsRenderer(props) {
     const [directions, setDirections] = React.useState(null);
@@ -20,7 +14,7 @@ export default function MapDirectionsRenderer(props) {
       }));
       const origin = waypoints.shift().location;
       const destination = waypoints.pop().location;
-  
+      
       const directionsService = new window.google.maps.DirectionsService();
       directionsService.route(
         {

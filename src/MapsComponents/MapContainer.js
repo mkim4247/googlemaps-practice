@@ -1,10 +1,14 @@
 import React from 'react';
 import MapWithDirections from './MapWithDirections'
 
-export default function MapContainer(props){
+const MapContainer = props => {
     return(
         <div>
-            <MapWithDirections places={props.places}/>
+            <MapWithDirections 
+            places={props.places} 
+            defaultCenter={props.defaultCenter}/>
         </div>
     )
 }
+
+export default MapContainer
